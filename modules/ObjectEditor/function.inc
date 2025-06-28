@@ -94,16 +94,6 @@ SetObjectMaterialEx(slot, index, model, const txdname[], const texture[], alpha,
     return 1;
 }
 
-// RemoveObjectMaterialEx(slot, index) 
-// {
-//     if(!IsValidObjectEx(slot))
-//         return 0;
-
-//     ObjectMaterial[slot][index] = MATERIAL_TYPE_NONE;
-//     RemoveDynamicObjectMaterial(Object[slot], i);
-//     return 1;
-// }
-
 RemoveAllObjectMaterialEx(slot) 
 {
     if(!IsValidObjectEx(slot))

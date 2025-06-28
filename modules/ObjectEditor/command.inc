@@ -25,6 +25,7 @@ SSCANF:objectmenu(string[])
 	else if(!strcmp(string,"tele",true)) return 8;
 	else if(!strcmp(string,"goto",true)) return 8;
 
+    else if(!strcmp(string,"texture",true)) return 9;
 	else if(!strcmp(string,"material",true)) return 9;
 
     else if(!strcmp(string,"resetmaterial",true)) return 10;
@@ -178,7 +179,7 @@ CMD:object(playerid, params[])
                 Float:speed
             ;
             if(sscanf(subparam, "icfF(5.0)", slot, direction, amount, speed))
-                return SendCommandMessage(playerid, "/object move [object id] [directoion (N/S/E/W/U(p)/D(own))] [amount] [opt:speed = 5.0]");
+                return SendCommandMessage(playerid, "/object move [object id] [direction (N/S/E/W/U(p)/D(own))] [amount] [opt:speed = 5.0]");
 
             if(floatround(speed) <= 0) 
                 return SendErrorMessage(playerid, "Speed cannot go below 1!");
@@ -460,8 +461,9 @@ CMD:object(playerid, params[])
                     else if(ObjectMaterial[slot][i] == MATERIAL_TYPE_MESSAGE)
                     {
                         GetDynamicObjectMaterialText(Object[slot], i, text, size, font, fsize, bold, fcolor, bcolor, alignment);
-
-                        format(string, sizeof(string), "SetObjectMaterialText(obj,%s,%i,%i,%s,%i,%i,0x%x,0x%x,%i);\n", text, i, size, font, fsize, bold, fcolor, bcolor, alignment);
+                        new outputtext[128];
+                        EscapeNewlineForExport(text, outputtext);
+                        format(string, sizeof(string), "SetObjectMaterialText(obj,%s,%i,%i,%s,%i,%i,0x%x,0x%x,%i);\n", outputtext, i, size, font, fsize, bold, fcolor, bcolor, alignment);
                         strcat(obString, string);
                     }
                 }
@@ -526,7 +528,6 @@ CMD:object(playerid, params[])
                             convertedText[128]
                         ;
                         strmid(string, string,(pos1+1), pos2);
-                        // if(!unformat(str,"p<,>{i}s[128]iis[32]I(24)I(1)I(-1)I(-16777216)I(1)", text, index, resolution, font, fontsize, bold, fontcolor, color, alignment))
                         if(!unformat(string,"p<,>{s[32]}s[128]iis[32]I(24)I(1)X(0xFFFFFF)X(0x000000)I(1)", text, index, resolution, font, fontsize, bold, fontcolor, color, alignment))
                         {
                             if(MAX_OBJECT_MATERIAL_SLOT > index >= 0)
@@ -727,3 +728,5 @@ CMD:object(playerid, params[])
     }
     return 1;
 }
+
+YCMD:ob(playerid, params[]) = object;

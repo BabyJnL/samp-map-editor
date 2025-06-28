@@ -71,11 +71,18 @@ HexToRGBA(value, &a, &r, &g, &b)
     b = (value >> 8) & 0xFF;
 }
 
-stock ReplaceSlashNWithNewline(const input[], output[], size = 128)
+stock ReplaceSlashNWithNewline(const input[], output[], size = sizeof(output))
 {
     new i = 0, j = 0;
+
+    // Hilangkan tanda kutip " di awal
+    if (input[0] == '"') i++;
+
     while (input[i] != '\0' && j < size - 1)
     {
+        if (input[i] == '"' && input[i + 1] == '\0')
+            break;
+
         if (input[i] == '\\' && input[i + 1] == 'n')
         {
             output[j++] = '\n';
@@ -86,6 +93,27 @@ stock ReplaceSlashNWithNewline(const input[], output[], size = 128)
             output[j++] = input[i++];
         }
     }
+
     output[j] = '\0';
     return 1;
 }
+
+stock EscapeNewlineForExport(const input[], output[], size = sizeof(output))
+{
+    new i = 0, j = 0;
+    while (input[i] != '\0' && j < size - 2) 
+    {
+        if (input[i] == '\n')
+        {
+            output[j++] = '\\';
+            output[j++] = 'n';
+        }
+        else
+        {
+            output[j++] = input[i];
+        }
+        i++;
+    }
+    output[j] = '\0';
+}
+
