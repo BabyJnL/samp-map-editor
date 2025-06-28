@@ -38,7 +38,7 @@ CMD:goto(playerid, params[])
 
     new Float:pos[3];
 
-    GetPlayerPos(playerid, pos[0], pos[1], pos[2]);
+    GetPlayerPos(targetplayer, pos[0], pos[1], pos[2]);
     SetPlayerPos(playerid, pos[0], pos[1], pos[2]);
 
     SendClientMessageEx(playerid, X11_GREEN, "TELEPORT: "WHITE"Teleported to "YELLOW"%s", ReturnPlayerName(targetplayer));
