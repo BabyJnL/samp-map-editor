@@ -1,63 +1,88 @@
-# samp-map-editor
+# SA-MP Map Editor
 
-[![sampctl](https://img.shields.io/badge/sampctl-samp--map--editor-2f2f2f.svg?style=for-the-badge)](https://github.com/BabyJnL/samp-map-editor)
+Map Editor ini dirancang khusus untuk para mapper, terutama pemain **Jogjagamers Roleplay**, agar dapat menggunakan map editor dengan kemampuan yang mirip seperti yang digunakan di dalam server JGRP. Editor ini dilengkapi fitur pemetaan objek, pengelompokan, export/import map, dan masih banyak lagi.
 
-<!--
-Short description of your library, why it's useful, some examples, pictures or
-videos. Link to your forum release thread too.
+## 📦 Installation
 
-Remember: You can use "forumfmt" to convert this readme to forum BBCode!
+### 📋 Prerequisites
 
-What the sections below should be used for:
+Sebelum melanjutkan instalasi, pastikan hal berikut:
 
-`## Installation`: Leave this section un-edited unless you have some specific
-additional installation procedure.
+- **sampctl**  
+  Tool utama untuk mengelola dan membangun project ini.  
+  📖 [Cara install sampctl](https://github.com/Southclaws/sampctl#installing)
 
-`## Testing`: Whether your library is tested with a simple `main()` and `print`,
-unit-tested, or demonstrated via prompting the player to connect, you should
-include some basic information for users to try out your code in some way.
+- **Git** (opsional)  
+  Digunakan untuk meng-clone repository dari GitHub. Jika tidak ingin menggunakan Git, Anda bisa langsung download file ZIP dari GitHub.
 
-And finally, maintaining your version number`:
+### 📥 Source Code Retreival
 
-* Follow [Semantic Versioning](https://semver.org/)
-* When you release a new version, update `VERSION` and `git tag` it
-* Versioning is important for sampctl to use the version control features
+Anda bisa mendapatkan source code proyek ini dengan dua cara:
 
-Happy Pawning!
--->
+#### 1. Download ZIP
+Download source code sebagai ZIP, ekstrak hasilnya di tempat penyimpanan yang Anda inginkan
 
-## Installation
+#### 2. Menggunakan Git (opsional)
+Jika Anda tidak memiliki Git, Anda bisa:
+- Kunjungi halaman repositori: ([samp-map-editor](https://github.com/BabyJnL/samp-map-editor))
+- Klik tombol "**Code**" -> "**Download ZIP**"
+- Ekstrak file ZIP
+- Buka folder hasil ekstraksi
 
-Simply install to your project:
+## ✅ Setup
 
-```bash
-sampctl package install BabyJnL/samp-map-editor
-```
+Setelah mengunduh atau meng-clone project ini, lakukan langkah berikut:
 
-Include in your code and begin using the library:
+1. Buat folder `map` yang nantinya folder ini akan digunakan untuk menyimpan file map hasil export atau untuk keperluan import
+2. Buat folder `internal` di dalam folder `scriptfiles` untuk penyimpanan data player
+    > Note: tanpa folder internal ini, server tidak bisa membuat file database untuk menyimpan data player
+3. Build & Jalankan Gamemode:
+    ```bash
+    sampctl build
+    sampctl run
+    ```
 
-```pawn
-#include <samp-map-editor>
-```
+## 💡 In-Game Usage
 
-## Usage
+Setelah server berjalan, buka client San Andreas Multiplayer kemudian tambahkan new server `localhost:7777` dan masuk ke dalam servernya
 
-<!--
-Write your code documentation or examples here. If your library is documented in
-the source code, direct users there. If not, list your API and describe it well
-in this section. If your library is passive and has no API, simply omit this
-section.
--->
 
-## Testing
+### 📋 List Command
 
-<!--
-Depending on whether your package is tested via in-game "demo tests" or
-y_testing unit-tests, you should indicate to readers what to expect below here.
--->
+| Command | Deskripsi |
+|--------|-----------|
+| `/help` | Menampilkan command yang tersedia di server
+| `/object` / `/ob` | Menampilkan menu utama object editor |
+| `/object create [model]` | Membuat objek berdasarkan parameter model yang diberikan |
+| `/ob remove [slot]` | Menghapus object berdasarkan slot yang diberikan |
+| `/ob clear` | Menghapus semua object yang dibuat |
+| `/ob copy [slot]` | Membuat clone dari object slot yang diberikan |
+| `/ob move [slot] [direction (N/S/E/W/U(p)/D(own))] [amount] [opt:speed = 5.0]` | Memindahkan object ke arah tertentu sebanyak amount yang diberikan dan dapat diatur kecepatan perpindahannya |
+| `/ob rot [slot] [slot] [rot X] [rot Y] [rot Z]` | Mengubah rotasi pada object slot dan titik rotasi yang diberikan |
+| `/ob select [opt: slot]` | Memilih object untuk diedit (parameter slot optional apabila ingin memilih objek dengan mengklik objek yang dituju) |
+| `/ob tele [slot]` | Teleportasi ke posisi object slot yang diberikan |
+| `/ob texture [slot] [index] [model] [txdname] [texture] [opt: alpha] [opt: red]  [opt: green]  [opt: blue]` | Memberikan texture pada object slot yang diberikan disertai dengan parameter pendukung untuk texture yang diinginkan (Texture dapat ditemukan di: https://textures.xyin.ws/?page=textures) |
+| `/ob resetmaterial [slot]` | Mengatur ulang semua texture / material object slot menjadi default |
+| `/ob textprop [slot] [index = 0]` | Menampilkan menu untuk mengatur material teks pada object slot dan index yang diberikan (default index adalah 0) |
+| `/ob paintbrush [material index] [model] [txdname] [texture] [opt: alpha] [opt: red]  [opt: green]  [opt: blue]` | Hampir sama dengan `/ob texture` namun alih-alih mengubah texture object slot slot secara langsung, command ini dapat mengubah texture banyak object dengan cara menembak object yang dituju |
+| `/ob model [slot] [model]` | Mengubah model pada object slot yang diberikan |
+| `/ob export [map name]` | Menyimpan object yang telah dibuat menjadi file .txt dengan nama map yang diberikan |
+| `/ob load [map name]` | Memuat object beserta texturenya dari file .txt dengan nama map yang diberikan di direktori map  |
+| `/ob group [slot] [group]` | Mengatur group dari object slot yang diberikan  |
+| `/ob gclone [group]` | Membuat clone dari group id yang diberikan  |
+| `/ob gmove [group] [direction (N/S/E/W/U(p)/D(own))] [amount] [opt:speed = 5.0]` | Memindahkan group object ke arah tertentu sebanyak amount yang diberikan dan dapat diatur kecepatan perpindahannya  |
+| `/ob grotate [group] [rot X] [rot Y] [rot Z]` | Mengubah rotasi pada object group dan titik rotasi yang diberikan  |
+| `/ob gremove [group]` | Menghapus object pada group yang diberikan  |
 
-To test, simply run the package:
+## 🙏 Credits
+Special Thanks to :
+- Southclaws for sampctl and tooling
+- Y_Less for YSI & sscanf
+- Incognito for Streamer Plugin
+- JaTochNietDan for FileManager Plugin
+- tianmetal for Gamemode Base Script
+- BabyJnL for Bug Fixes and Enhancements
 
-```bash
-sampctl package run
-```
+## 📄 License
+
+This project is open-source. You are free to use, modify, and distribute with proper credits.  
