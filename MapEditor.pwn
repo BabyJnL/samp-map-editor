@@ -1,7 +1,7 @@
 // ============= [Server Settings] =============
 #define	SERVER_NAME			"Map Editor by BabyJnL"
 #define SERVER_MAP			"San Andreas"
-#define SERVER_GAMEMODE		"Map Editor V1.1.2"
+#define SERVER_GAMEMODE		"Map Editor V1.2"
 #define SERVER_LANGUAGE		"Bahasa Indonesia"
 
 #define DATABASE 			"internal/main.db"
