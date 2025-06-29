@@ -641,7 +641,7 @@ CMD:object(playerid, params[])
                 }
             }
             Streamer_Update(playerid);
-            SendObjectMessage(playerid, ""WHITE"Duplicated object with "YELLOW"group %i"WHITE" to "YELLOW"group %i"WHITE", total objects: "GREEN"%d", group, Iter_Count(Objects));
+            SendObjectMessage(playerid, ""WHITE"Duplicated object with "YELLOW"group %i"WHITE", total objects: "GREEN"%d", group, Iter_Count(Objects));
         }
         case 18: 
         {

@@ -2,7 +2,7 @@ CMD:help(playerid, params[])
 {
     SendCommandMessage(playerid, "/help, /credits, /goto, /jetpack, /lt, /rt, /ft, /bt");
     SendCommandMessage(playerid, "/up, /dn, /skin, /land, /weapon, /teleport, /setloc, /setint");
-    SendCommandMessage(playerid, "/gotols, /object");
+    SendCommandMessage(playerid, "/gotols, /teleport, /object");
     return 1;
 }
 
