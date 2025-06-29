@@ -36,8 +36,9 @@ Setelah mengunduh atau meng-clone project ini, lakukan langkah berikut:
 1. Buat folder `map` yang nantinya folder ini akan digunakan untuk menyimpan file map hasil export atau untuk keperluan import
 2. Buat folder `internal` di dalam folder `scriptfiles` untuk penyimpanan data player
     > Note: tanpa folder internal ini, server tidak bisa membuat file database untuk menyimpan data player
-3. Build & Jalankan Gamemode:
+3. Install Depedencies, Build & Jalankan Gamemode:
     ```bash
+    sampctl ensure
     sampctl build
     sampctl run
     ```
