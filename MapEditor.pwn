@@ -21,7 +21,10 @@ enum
     DIALOG_TEXT_SET_FONT_SIZE,
     DIALOG_TEXT_SET_FONT_COLOR,
     DIALOG_TEXT_SET_BG_COLOR,
-    DIALOG_TEXT_SET_ALLIGNMENT
+    DIALOG_TEXT_SET_ALLIGNMENT,
+
+    DIALOG_MAP_LIST,
+    DIALOG_LOAD_MAP_CONFIRMATION
 }
 
 // ============= [Macros] =============
@@ -469,6 +472,111 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             SetPlayerPos(playerid,TeleportList[listitem][Pos_X],TeleportList[listitem][Pos_Y],TeleportList[listitem][Pos_Z]);
         }
         return 1;
+    }
+    else if(dialogid == DIALOG_MAP_LIST) 
+    {
+        if(response) 
+        {
+            new string[256];
+            format(string, sizeof(string), ""YELLOW"WARNING!!!"WHITE":\n\nYou are about to load map "CYAN"%s"WHITE" to server\n"RED"This mean all of created object will be cleared"WHITE".\n\nAre you sure?", inputtext);
+            SetPVarString(playerid, "SelectedMap", inputtext);
+            ShowPlayerDialog(playerid, DIALOG_LOAD_MAP_CONFIRMATION, DIALOG_STYLE_MSGBOX, "Map Load Confirmation", string, "Confirm", "Cancel");
+        }
+        return 1;
+    }
+    else if(dialogid == DIALOG_LOAD_MAP_CONFIRMATION)
+    {
+        if(response) 
+        {
+            new 
+                string[256],
+                targetfile[256],
+                filename[128]
+            ;
+            GetPVarString(playerid, "SelectedMap", filename);
+            format(targetfile, sizeof(targetfile), "map/%s.txt", filename);
+
+            if(!file_exists(targetfile))
+                return SendErrorMessage(playerid, "Failed to load %s, no such file", targetfile);
+
+            DestroyAllObjects();
+
+            new 
+                File:file = f_open(targetfile, "r"),
+                model,
+                Float:pos[3],
+                Float:rot[3],
+                object_counter = 0,
+                pos1,
+                pos2,
+                last_slot
+            ;
+
+            while(f_read(file, string, sizeof(string)) > 0)
+            {
+                pos1 = strfind(string, "(", false);
+                pos2 = strfind(string, ")", false);
+
+                if(pos1 != -1 && pos1 != -2)
+                {
+                    if(strfind(string, "CreateObject", false) != -1 || strfind(string, "CreateDynamicObject", false) != -1)
+                    {
+                        strmid(string, string, (pos1+1), pos2);
+                        if(!unformat(string, "p<,>iffffff", model, pos[0], pos[1], pos[2], rot[0], rot[1], rot[2]))
+                        {
+                            last_slot = CreateObjectEx(model, pos[0], pos[1], pos[2], rot[0], rot[1], rot[2]);
+                            object_counter++;
+                        }
+                    }
+                    else if(strfind(string, "SetObjectMaterialText", false) != -1)
+                    {
+                        new 
+                            index,
+                            text[128],
+                            resolution,
+                            font[32],
+                            fontsize,
+                            bold,
+                            fontcolor,
+                            color,
+                            alignment,
+                            convertedText[128]
+                        ;
+                        strmid(string, string,(pos1+1), pos2);
+                        if(!unformat(string,"p<,>{s[32]}s[128]iis[32]I(24)I(1)X(0xFFFFFF)X(0x000000)I(1)", text, index, resolution, font, fontsize, bold, fontcolor, color, alignment))
+                        {
+                            if(MAX_OBJECT_MATERIAL_SLOT > index >= 0)
+                            {
+                                ReplaceSlashNWithNewline(text, convertedText);
+                                SetDynamicObjectMaterialText(Object[last_slot], index, convertedText, resolution, font, fontsize, bold, fontcolor, color, alignment);
+                                ObjectMaterial[last_slot][index] = MATERIAL_TYPE_MESSAGE;
+                            }
+                        }
+                    }
+                    else if(strfind(string, "SetObjectMaterial", false) != -1 || strfind(string, "SetDynamicObjectMaterial", false) != -1)
+                    {
+                        new 
+                            index,
+                            txdname[32],
+                            texture[32],
+                            color
+                        ;
+
+                        strmid(string, string, (pos1+1), pos2); 
+                        if(!unformat(string,"p<,>{s[32]}dds[32]s[32]X(0x000000)", index, model, txdname, texture, color))
+                        {
+                            if(MAX_OBJECT_MATERIAL_SLOT > index >= 0)
+                            {
+                                SetDynamicObjectMaterial(Object[last_slot],index,model,txdname,texture,color);
+                                ObjectMaterial[last_slot][index] = MATERIAL_TYPE_TEXTURE;
+                            }
+                        }
+                    }
+                }
+            }
+            f_close(file);
+            SendObjectMessage(playerid, ""WHITE"Map "CYAN"%s"WHITE" successfully loaded, total objects: "YELLOW"%i", inputtext, object_counter);
+        }
     }
     return 0;
 }

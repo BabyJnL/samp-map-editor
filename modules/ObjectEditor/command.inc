@@ -57,6 +57,7 @@ SSCANF:objectmenu(string[])
     else if(!strcmp(string,"gdestroy",true)) return 20;
     else if(!strcmp(string,"gremove",true)) return 20;
 
+    else if(!strcmp(string,"colour",true)) return 21;
 	return 0;
 }
 
@@ -547,8 +548,8 @@ CMD:object(playerid, params[])
                             color
                         ;
 
-                        strmid(string, string, (pos1+1), pos2);
-                        if(!unformat(string,"p<,>{s[32]}dds[32]s[32]D(-1)", index, model, txdname, texture, color))
+                        strmid(string, string, (pos1+1), pos2); 
+                        if(!unformat(string,"p<,>{s[32]}dds[32]s[32]X(0x000000)", index, model, txdname, texture, color))
                         {
                             if(MAX_OBJECT_MATERIAL_SLOT > index >= 0)
                             {
@@ -718,15 +719,60 @@ CMD:object(playerid, params[])
             }
             SendObjectMessage(playerid, ""YELLOW"%i "WHITE"object(s) has been deleted, total objects: "GREEN"%i", objectcounter, Iter_Count(Objects));
         }
+        case 21: 
+        {
+            new 
+                slot,
+                index,
+                colour[4]
+            ;
+            if(sscanf(subparam, "iiiiii", slot, index, colour[0], colour[1], colour[2], colour[3]))
+                return SendCommandMessage(playerid, "/object colour [slot] [index] [alpha] [red] [green] [blue]");
+
+            if(!IsValidObjectEx(slot))
+                return SendErrorMessage(playerid, "Object slot "YELLOW"%i "WHITE"doesn't exists!", slot);
+
+            SetObjectMaterialEx(slot, index, -1, "none", "none", colour[0], colour[1], colour[2], colour[3]);
+        }
         default:
         {
             SendCommandMessage(playerid, "/object [options]");
             SendCommandMessage(playerid, "create, remove, clear, copy, move, rotate, select, tele");
             SendCommandMessage(playerid, "save, model, material, load, textprop, resetmaterial", "paintbrush");
-            SendCommandMessage(playerid, "group, gcopy, gmove, grotate, gremove");
+            SendCommandMessage(playerid, "group, gcopy, gmove, grotate, gremove, colour");
         }
     }
     return 1;
 }
 
 YCMD:ob(playerid, params[]) = object;
+
+CMD:maplist(playerid, params[]) 
+{
+    new 
+        dir:handle = dir_open("./map"),
+        item[40],
+        type,
+        string[1024]
+    ;
+	
+    while(dir_list(handle, item, type))
+    {
+        if(type == FM_FILE) 
+        {
+            new 
+                temp[128],
+                len = strlen(item)
+            ;
+
+            if(len > 4 && strfind(item, ".txt", true) == (len - 4)) 
+                item[len - 4] = '\0';
+
+            format(temp, sizeof(temp), "%s\n", item);
+            strcat(string, temp);
+        }
+    }
+    dir_close(handle);
+    ShowPlayerDialog(playerid, DIALOG_MAP_LIST, DIALOG_STYLE_LIST, "Available Map List", string, "Load", "Close");
+    return 1;
+}

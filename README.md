@@ -12,22 +12,12 @@ Sebelum melanjutkan instalasi, pastikan hal berikut:
   Tool utama untuk mengelola dan membangun project ini.  
   📖 [Cara install sampctl](https://github.com/Southclaws/sampctl#installing)
 
-- **Git** (opsional)  
-  Digunakan untuk meng-clone repository dari GitHub. Jika tidak ingin menggunakan Git, Anda bisa langsung download file ZIP dari GitHub.
-
+- **Git** 
+  Digunakan untuk meng-clone repository dari GitHub dan menginstall depedencies yang dibutuhkan oleh source code nantinya.
 ### 📥 Source Code Retreival
-
-Anda bisa mendapatkan source code proyek ini dengan dua cara:
-
-#### 1. Download ZIP
-Download source code sebagai ZIP, ekstrak hasilnya di tempat penyimpanan yang Anda inginkan
-
-#### 2. Menggunakan Git (opsional)
-Jika Anda tidak memiliki Git, Anda bisa:
-- Kunjungi halaman repositori: ([samp-map-editor](https://github.com/BabyJnL/samp-map-editor))
-- Klik tombol "**Code**" -> "**Download ZIP**"
-- Ekstrak file ZIP
-- Buka folder hasil ekstraksi
+```bash
+git clone https://github.com/BabyJnL/samp-map-editor
+```
 
 ## ✅ Setup
 

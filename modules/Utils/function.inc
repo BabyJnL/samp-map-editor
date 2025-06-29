@@ -63,12 +63,12 @@ stock SendClientMessageEx(playerid, color, const text[], {Float, _}:...)
 	return 1;
 }
 
-HexToRGBA(value, &a, &r, &g, &b)
+HexToRGBA(value, &r, &g, &b, &a)
 {
-    a = value & 0xFF;
     r = (value >> 24) & 0xFF;
     g = (value >> 16) & 0xFF;
     b = (value >> 8) & 0xFF;
+    a = value & 0xFF;
 }
 
 stock ReplaceSlashNWithNewline(const input[], output[], size = sizeof(output))
